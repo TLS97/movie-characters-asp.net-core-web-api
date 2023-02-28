@@ -11,10 +11,7 @@ namespace MovieCharactersAPI.Models
         public string Gender { get; set; } = null!;
         public string Picture { get; set; } = null!;
 
-        // Relationship
-        public int MovieId { get; set; }
-
         // Navigation property
-        public Movie? Movie { get; set; }
+        public ICollection<Movie> Movies { get; set;} = new List<Movie>();
     }
 }
