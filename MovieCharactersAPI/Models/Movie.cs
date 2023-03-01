@@ -13,7 +13,6 @@ namespace MovieCharactersAPI.Models
         public string Picture { get; set; } = null!;
         public string Trailer { get; set; } = null!;
 
-
         // Relationships
         public int FranchiseId { get; set; }
 

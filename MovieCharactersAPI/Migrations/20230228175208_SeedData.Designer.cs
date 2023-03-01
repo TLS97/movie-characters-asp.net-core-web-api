@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MovieCharactersAPI.Models;
 
@@ -10,9 +11,11 @@ using MovieCharactersAPI.Models;
 namespace MovieCharactersAPI.Migrations
 {
     [DbContext(typeof(MovieCharactersDbContext))]
-    partial class MovieCharactersDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230228175208_SeedData")]
+    partial class SeedData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -20,6 +23,21 @@ namespace MovieCharactersAPI.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("CharacterMovie", b =>
+                {
+                    b.Property<int>("CharactersId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MoviesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CharactersId", "MoviesId");
+
+                    b.HasIndex("MoviesId");
+
+                    b.ToTable("CharacterMovie");
+                });
 
             modelBuilder.Entity("MovieCharactersAPI.Models.Character", b =>
                 {
@@ -178,41 +196,19 @@ namespace MovieCharactersAPI.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Roles", b =>
+            modelBuilder.Entity("CharacterMovie", b =>
                 {
-                    b.Property<int>("CharacterId")
-                        .HasColumnType("int");
+                    b.HasOne("MovieCharactersAPI.Models.Character", null)
+                        .WithMany()
+                        .HasForeignKey("CharactersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<int>("MovieId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CharacterId", "MovieId");
-
-                    b.HasIndex("MovieId");
-
-                    b.ToTable("Roles");
-
-                    b.HasData(
-                        new
-                        {
-                            CharacterId = 1,
-                            MovieId = 1
-                        },
-                        new
-                        {
-                            CharacterId = 2,
-                            MovieId = 1
-                        },
-                        new
-                        {
-                            CharacterId = 3,
-                            MovieId = 2
-                        },
-                        new
-                        {
-                            CharacterId = 4,
-                            MovieId = 2
-                        });
+                    b.HasOne("MovieCharactersAPI.Models.Movie", null)
+                        .WithMany()
+                        .HasForeignKey("MoviesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MovieCharactersAPI.Models.Movie", b =>
@@ -224,21 +220,6 @@ namespace MovieCharactersAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("Franchise");
-                });
-
-            modelBuilder.Entity("Roles", b =>
-                {
-                    b.HasOne("MovieCharactersAPI.Models.Character", null)
-                        .WithMany()
-                        .HasForeignKey("CharacterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MovieCharactersAPI.Models.Movie", null)
-                        .WithMany()
-                        .HasForeignKey("MovieId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("MovieCharactersAPI.Models.Franchise", b =>
