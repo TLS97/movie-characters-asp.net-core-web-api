@@ -1,4 +1,6 @@
-﻿namespace MovieCharactersAPI.Models.DTOs.Characters
+﻿using MovieCharactersAPI.Models.Domain;
+
+namespace MovieCharactersAPI.Models.DTOs.Characters
 {
     public class CharacterDTO
     {

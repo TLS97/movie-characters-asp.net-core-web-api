@@ -1,5 +1,5 @@
 ﻿using Microsoft.Identity.Client;
-using MovieCharactersAPI.Models;
+using MovieCharactersAPI.Models.Domain;
 
 namespace MovieCharactersAPI.Services.CharacterServices
 {

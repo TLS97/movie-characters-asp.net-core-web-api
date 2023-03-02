@@ -1,33 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mime;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MovieCharactersAPI.Models;
+using MovieCharactersAPI.Models.Domain;
 using MovieCharactersAPI.Models.DTOs.Characters;
 using MovieCharactersAPI.Services.CharacterServices;
 
 namespace MovieCharactersAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
+    [Produces(MediaTypeNames.Application.Json)]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [ApiConventionType(typeof(DefaultApiConventions))]
     public class CharacterController : ControllerBase
     {
-        private readonly MovieCharactersDbContext _context;
         private readonly ICharacterService _characterService;
         private readonly IMapper _mapper;
 
-        public CharacterController(MovieCharactersDbContext context, ICharacterService characterService, IMapper mapper)
+        public CharacterController(ICharacterService characterService, IMapper mapper)
         {
-            _context = context;
             _characterService= characterService;
             _mapper = mapper;
         }
 
         // GET: api/Character
+        /// <summary>
+        /// Get all the characters in the database.
+        /// </summary>
+        /// <returns>List of Characters</returns>
         [HttpGet]
         public async Task<ActionResult<ICollection<CharacterDTO>>> GetCharacters()
         {
@@ -35,6 +41,11 @@ namespace MovieCharactersAPI.Controllers
         }
 
         // GET: api/Character/5
+        /// <summary>
+        /// Gets a specific character from the database by its ID.
+        /// </summary>
+        /// <param name="id">The character's ID</param>
+        /// <returns>A Character object</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<CharacterDTO>> GetCharacter(int id)
         {
@@ -49,7 +60,12 @@ namespace MovieCharactersAPI.Controllers
         }
 
         // PUT: api/Character/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Updates a specific character in the database by its ID.
+        /// </summary>
+        /// <param name="id">The character's ID</param>
+        /// <param name="characterDto">A Character object with updated data</param>
+        /// <returns>An Action Result</returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCharacter(int id, CharacterPutDTO characterDto)
         {
@@ -70,7 +86,11 @@ namespace MovieCharactersAPI.Controllers
         }
 
         // POST: api/Character
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Adds a new character to the database.
+        /// </summary>
+        /// <param name="characterDto">The character object to add to the database</param>
+        /// <returns>An Action Result</returns>
         [HttpPost]
         public async Task<ActionResult<CharacterPostDTO>> PostCharacter(CharacterPostDTO characterDto)
         {
@@ -80,6 +100,11 @@ namespace MovieCharactersAPI.Controllers
         }
 
         // DELETE: api/Character/5
+        /// <summary>
+        /// Deletes a character from the database by its ID.
+        /// </summary>
+        /// <param name="id">The character's ID</param>
+        /// <returns>An Action Result</returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCharacter(int id)
         {
