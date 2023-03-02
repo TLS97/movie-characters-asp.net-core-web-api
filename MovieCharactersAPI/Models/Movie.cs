@@ -18,6 +18,6 @@ namespace MovieCharactersAPI.Models
 
         // Navigation properties
         public Franchise? Franchise { get; set; }
-        public ICollection<Character> Characters { get;set; } = new HashSet<Character>();
+        public ICollection<Character>? Characters { get;set; } = new HashSet<Character>();
     }
 }

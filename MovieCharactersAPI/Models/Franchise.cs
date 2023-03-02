@@ -10,6 +10,6 @@ namespace MovieCharactersAPI.Models
         public string Description { get; set; } = null!;
 
         // Navigation property
-        public ICollection<Movie> Movies { get; set; } = new HashSet<Movie>();
+        public ICollection<Movie>? Movies { get; set; } = new HashSet<Movie>();
     }
 }

@@ -1,9 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace MovieCharactersAPI.Models
+﻿namespace MovieCharactersAPI.Models.DTOs.Characters
 {
-    [Table("Character")]
-    public class Character
+    public class CharacterDTO
     {
         public int Id { get; set; }
         public string Name { get; set; } = null!;
@@ -11,7 +8,6 @@ namespace MovieCharactersAPI.Models
         public string Gender { get; set; } = null!;
         public string Picture { get; set; } = null!;
 
-        // Navigation property
-        public ICollection<Movie>? Movies { get; set;} = new List<Movie>();
+        public ICollection<Movie>? Movies { get; set; } = new List<Movie>();
     }
 }
