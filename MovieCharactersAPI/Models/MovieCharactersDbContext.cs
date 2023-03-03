@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MovieCharactersAPI.Models.Domain;
 
 namespace MovieCharactersAPI.Models
 {
@@ -8,12 +9,14 @@ namespace MovieCharactersAPI.Models
         {
         }
 
+        // Tables
         public DbSet<Movie> Movies { get; set; }
         public DbSet<Character> Characters { get; set; }
         public DbSet<Franchise> Franchises { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Seed data
             modelBuilder.Entity<Franchise>().HasData(
                 new Franchise()
                 {
