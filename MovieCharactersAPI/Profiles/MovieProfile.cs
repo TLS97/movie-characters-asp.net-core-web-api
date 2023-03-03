@@ -8,8 +8,12 @@ namespace MovieCharactersAPI.Profiles
     {
         public MovieProfile()
         {
+            CreateMap<MoviePostDTO, Movie>();
+            CreateMap<MoviePutDTO, Movie>();
             CreateMap<Movie, MovieSummaryDTO>();
-            CreateMap<Movie, MovieDTO>().ForMember(dto => dto.Characters, opt => opt.MapFrom(m => m.Characters));
+            CreateMap<Movie, MovieDTO>()
+                .ForMember(dto => dto.Characters, opt => opt
+                .MapFrom(m => m.Characters));
         }
     }
 }
