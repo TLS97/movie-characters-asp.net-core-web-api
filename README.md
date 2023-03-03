@@ -20,5 +20,5 @@ This command will create the database in SQL Server.
 
 ## Contributors
 
-[Tine-Lovise Storvoll] (https://gitlab.com/TLS97)
+[Tine-Lovise Storvoll](https://gitlab.com/TLS97)
 [Ha Hoang](https://gitlab.com/hhoan)
