@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -10,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using MovieCharactersAPI.Models.Domain;
 using MovieCharactersAPI.Models.DTOs.Characters;
 using MovieCharactersAPI.Services.CharacterServices;
+using MovieCharactersAPI.Utils.Exceptions;
 
 namespace MovieCharactersAPI.Controllers
 {
@@ -37,7 +39,7 @@ namespace MovieCharactersAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<ICollection<CharacterDTO>>> GetCharacters()
         {
-            return _mapper.Map<List<CharacterDTO>>(await _characterService.GetAllAsync());
+            return Ok(_mapper.Map<List<CharacterDTO>>(await _characterService.GetAllAsync()));
         }
 
         // GET: api/Character/5
@@ -49,14 +51,18 @@ namespace MovieCharactersAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<CharacterDTO>> GetCharacter(int id)
         {
-            Character character = await _characterService.GetByIdAsync(id);
-
-            if (character == null)
+            try
             {
-                return NotFound();  
+                return Ok(_mapper.Map<CharacterDTO>(await _characterService.GetByIdAsync(id)));
+            } catch (CharacterNotFoundException ex)
+            {
+                return NotFound(
+                    new ProblemDetails()
+                    {
+                        Detail = ex.Message,
+                        Status = (int)HttpStatusCode.NotFound
+                    });
             }
-
-            return _mapper.Map<CharacterDTO>(character);
         }
 
         // PUT: api/Character/5
@@ -65,7 +71,7 @@ namespace MovieCharactersAPI.Controllers
         /// </summary>
         /// <param name="id">The character's ID</param>
         /// <param name="characterDto">A Character object with updated data</param>
-        /// <returns>An Action Result</returns>
+        /// <returns>Action Result</returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCharacter(int id, CharacterPutDTO characterDto)
         {
@@ -74,15 +80,19 @@ namespace MovieCharactersAPI.Controllers
                 return BadRequest();
             }
 
-            if (!_characterService.CharacterExists(id))
+            try
             {
-                return NotFound();
-            }
+                await _characterService.UpdateAsync(_mapper.Map<Character>(characterDto));
+                return NoContent();
 
-            Character domainCharacter = _mapper.Map<Character>(characterDto);
-            await _characterService.UpdateAsync(domainCharacter);
-
-            return NoContent();
+            } catch (CharacterNotFoundException ex)
+            {
+                return NotFound(new ProblemDetails()
+                {
+                    Detail = ex.Message,
+                    Status = ((int)HttpStatusCode.NotFound)
+                });
+            };
         }
 
         // POST: api/Character
@@ -90,7 +100,7 @@ namespace MovieCharactersAPI.Controllers
         /// Adds a new character to the database.
         /// </summary>
         /// <param name="characterDto">The character object to add to the database</param>
-        /// <returns>An Action Result</returns>
+        /// <returns>Action Result</returns>
         [HttpPost]
         public async Task<ActionResult<CharacterPostDTO>> PostCharacter(CharacterPostDTO characterDto)
         {
@@ -104,18 +114,23 @@ namespace MovieCharactersAPI.Controllers
         /// Deletes a character from the database by its ID.
         /// </summary>
         /// <param name="id">The character's ID</param>
-        /// <returns>An Action Result</returns>
+        /// <returns>Action Result</returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCharacter(int id)
         {
-            if (!_characterService.CharacterExists(id))
+            try
             {
-                return NotFound();
+                await _characterService.DeleteAsync(id);
+                return NoContent();
+            } catch (CharacterNotFoundException ex)
+            {
+                return NotFound(
+                    new ProblemDetails()
+                    {
+                        Detail = ex.Message,
+                        Status = ((int)HttpStatusCode.NotFound)
+                    });
             }
-
-            await _characterService.DeleteAsync(id);
-
-            return NoContent();
         }
     }
 }

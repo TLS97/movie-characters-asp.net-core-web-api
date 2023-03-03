@@ -5,6 +5,6 @@ namespace MovieCharactersAPI.Services.CharacterServices
 {
     public interface ICharacterService : ICrudService<Character, int>
     {
-        public bool CharacterExists(int id);
+        public Task<bool> CharacterExists(int id);
     }
 }

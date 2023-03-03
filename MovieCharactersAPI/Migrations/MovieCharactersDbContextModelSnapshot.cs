@@ -21,7 +21,7 @@ namespace MovieCharactersAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("MovieCharactersAPI.Models.Character", b =>
+            modelBuilder.Entity("MovieCharactersAPI.Models.Domain.Character", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -31,19 +31,19 @@ namespace MovieCharactersAPI.Migrations
 
                     b.Property<string>("Alias")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("Gender")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("Picture")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
 
@@ -84,7 +84,7 @@ namespace MovieCharactersAPI.Migrations
                         });
                 });
 
-            modelBuilder.Entity("MovieCharactersAPI.Models.Franchise", b =>
+            modelBuilder.Entity("MovieCharactersAPI.Models.Domain.Franchise", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -94,11 +94,11 @@ namespace MovieCharactersAPI.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(50)");
 
                     b.HasKey("Id");
 
@@ -113,7 +113,7 @@ namespace MovieCharactersAPI.Migrations
                         });
                 });
 
-            modelBuilder.Entity("MovieCharactersAPI.Models.Movie", b =>
+            modelBuilder.Entity("MovieCharactersAPI.Models.Domain.Movie", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -123,29 +123,29 @@ namespace MovieCharactersAPI.Migrations
 
                     b.Property<string>("Director")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<int>("FranchiseId")
                         .HasColumnType("int");
 
                     b.Property<string>("Genre")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("Picture")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(100)");
 
                     b.Property<int>("ReleaseYear")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("Trailer")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(100)");
 
                     b.HasKey("Id");
 
@@ -215,9 +215,9 @@ namespace MovieCharactersAPI.Migrations
                         });
                 });
 
-            modelBuilder.Entity("MovieCharactersAPI.Models.Movie", b =>
+            modelBuilder.Entity("MovieCharactersAPI.Models.Domain.Movie", b =>
                 {
-                    b.HasOne("MovieCharactersAPI.Models.Franchise", "Franchise")
+                    b.HasOne("MovieCharactersAPI.Models.Domain.Franchise", "Franchise")
                         .WithMany("Movies")
                         .HasForeignKey("FranchiseId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -228,20 +228,20 @@ namespace MovieCharactersAPI.Migrations
 
             modelBuilder.Entity("Roles", b =>
                 {
-                    b.HasOne("MovieCharactersAPI.Models.Character", null)
+                    b.HasOne("MovieCharactersAPI.Models.Domain.Character", null)
                         .WithMany()
                         .HasForeignKey("CharacterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MovieCharactersAPI.Models.Movie", null)
+                    b.HasOne("MovieCharactersAPI.Models.Domain.Movie", null)
                         .WithMany()
                         .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MovieCharactersAPI.Models.Franchise", b =>
+            modelBuilder.Entity("MovieCharactersAPI.Models.Domain.Franchise", b =>
                 {
                     b.Navigation("Movies");
                 });

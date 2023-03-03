@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MovieCharactersAPI.Models;
 using MovieCharactersAPI.Models.Domain;
+using MovieCharactersAPI.Models;
+using MovieCharactersAPI.Utils.Exceptions;
 
 namespace MovieCharactersAPI.Services.CharacterServices
 {
@@ -16,17 +17,26 @@ namespace MovieCharactersAPI.Services.CharacterServices
 
         public async Task<ICollection<Character>> GetAllAsync()
         {
-            return await _context.Characters
-                .ToListAsync();
+            return await _context.Characters.ToListAsync();
         }
 
         public async Task<Character> GetByIdAsync(int id)
         {
+            if (! await CharacterExists(id))
+            {
+                throw new CharacterNotFoundException();
+            }
+
             return await _context.Characters.FindAsync(id);
         }
 
         public async Task UpdateAsync(Character entity)
         {
+            if (! await CharacterExists(entity.Id)) 
+            { 
+                throw new CharacterNotFoundException(); 
+            
+            }
             _context.Entry(entity).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }
@@ -38,14 +48,20 @@ namespace MovieCharactersAPI.Services.CharacterServices
             return entity;
         }
 
-        public bool CharacterExists(int id)
+        public async Task<bool> CharacterExists(int id)
         {
-            return _context.Characters.Any(c => c.Id == id);
+            return await _context.Characters.AnyAsync(c => c.Id == id);
         }
 
         public async Task DeleteAsync(int id)
         {
             var character = await _context.Characters.FindAsync(id);
+
+            if (character == null)
+            {
+                throw new CharacterNotFoundException();
+            }
+
             _context.Characters.Remove(character);
             await _context.SaveChangesAsync();
         }
