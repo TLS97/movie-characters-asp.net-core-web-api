@@ -1,9 +1,8 @@
 ﻿using MovieCharactersAPI.Models.Domain;
-using MovieCharactersAPI.Models.DTOs.Characters;
 
 namespace MovieCharactersAPI.Models.DTOs.Movies
 {
-    public class MovieDTO
+    public class MoviePutDTO
     {
         public int Id { get; set; }
         public string Title { get; set; } = null!;
@@ -13,7 +12,5 @@ namespace MovieCharactersAPI.Models.DTOs.Movies
         public string Picture { get; set; } = null!;
         public string Trailer { get; set; } = null!;
         public int FranchiseId { get; set; }
-        public List<CharacterSummaryDTO> Characters { get; set; } = null!;
-
     }
 }
