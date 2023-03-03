@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MovieCharactersAPI.Models;
 using MovieCharactersAPI.Services.CharacterServices;
+using MovieCharactersAPI.Services.FranchiseServices;
 
 namespace MovieCharactersAPI
 {
@@ -19,6 +20,7 @@ namespace MovieCharactersAPI
             );
 
             builder.Services.AddScoped<ICharacterService, CharacterService>();
+            builder.Services.AddTransient<IFranchiseService, FranchiseService>();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();

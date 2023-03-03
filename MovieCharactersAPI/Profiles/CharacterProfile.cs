@@ -12,6 +12,7 @@ namespace MovieCharactersAPI.Profiles
             CreateMap<CharacterPostDTO, Character>();
             CreateMap<Character, CharacterDTO>()
                 .ForMember(dto => dto.Movies, opt => opt.MapFrom(p => p.Movies.Select(s => s.Id).ToList()));
+            CreateMap<Character, CharacterSummaryDTO>();
         }
     }
 }
